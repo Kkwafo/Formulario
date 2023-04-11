@@ -13,4 +13,12 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    // public function findAllProduct($name)
+    // {
+    //     return $this->createQueryBuilder('p')
+    //         ->where('p.name = :name')
+    //         ->setParameter('name', $name)
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 }

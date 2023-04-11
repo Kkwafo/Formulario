@@ -49,7 +49,7 @@ class ProductController extends AbstractController
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-
+        //me sigue tirando problemas el doctrine
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -62,7 +62,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-        /**
+    /**
      * @Route("/productswhitcat/new", name="productwithCat_new", methods={"GET","POST"})
      */
     public function newproduct(Request $request, EntityManagerInterface $entityManager): Response
