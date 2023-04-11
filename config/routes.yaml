@@ -1,0 +1,36 @@
+controllers:
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: annotation
+
+product_index:
+  path: /
+  controller: App\Controller\ProductController::index
+
+product_new:
+  path: /products/new
+  controller: App\Controller\ProductController::new
+
+product_category_new:
+  path: /product-categories/new
+  controller: App\Controller\ProductCategoryController::new
+
+product_categories:
+  path: /product-categories
+  controller: App\Controller\ProductCategoryController::index
+  methods: ["GET"]
+
+productwithcat_index:
+  path: /productswhitcat/new
+  controller: App\Controller\ProductController::newproduct
+
+product_edit:
+  path: /products/edit/{id}
+  controller: App\Controller\ProductController::edit
+  methods: [GET, POST]
+
+product_category_list:
+  path: /products-categories/list
+  controller: App\Controller\ProductCategoryController::list
+  methods: [GET]

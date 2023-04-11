@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Product</h2>
+            <ul>
+                <li><a href="{{ path('product_new') }}">Create Product</a></li>
+
+                </li>
+                {# <li><a href="{{ path('product_edit') }}">Edit Product</a></li> #}
+
+                </li>
+                
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Product with category</h2>
+            <ul>
+                <li><a href="{{ path('productwithcat_index') }}">Create Product whit Category</a></li>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Categories</h2>
+            <ul>
+                <li><a href="{{ path('product_category_new') }}">Create Category</a></li>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
