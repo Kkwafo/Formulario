@@ -3,30 +3,34 @@
 namespace App\Controller;
 
 use App\Entity\ProductCategory;
+use App\Repository\ProductCategoryRepository;
 use App\Form\ProductCategoryType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductCategoryController extends AbstractController
 {
-    private $productCategories = [];
-
     /**
      * @Route("/product-category/new", name="product_category_new")
      */
-    public function new(Request $request)
+    public function new(Request $request, EntityManagerInterface $entityManager, ?ProductCategory $productCategory = null): Response
     {
-        $productCategory = new ProductCategory();
+        if (!$productCategory) {
+            $productCategory = new ProductCategory();
+        }
+
         $form = $this->createForm(ProductCategoryType::class, $productCategory);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($form->getData());
+            $entityManager->flush();
 
-            $this->productCategories[] = $productCategory;
-
-            return $this->redirectToRoute('product_category_list');
+            return $this->redirectToRoute('product_index');
         }
 
         return $this->render('product_category/new.html.twig', [
@@ -34,4 +38,15 @@ class ProductCategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/products-categories/list", name="product_category_list", methods={"GET"})
+     */
+    public function listCategories(ProductCategoryRepository $categoryRepository): Response
+    {
+        $categories = $categoryRepository->findAll();
+
+        return $this->render('product/categoryList.html.twig', [
+            'categories' => $categories,
+        ]);
+    }
 }

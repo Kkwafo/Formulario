@@ -32,5 +32,5 @@ product_edit:
 
 product_category_list:
   path: /products-categories/list
-  controller: App\Controller\ProductCategoryController::list
+  controller: App\Controller\ProductCategoryController::listAction
   methods: [GET]

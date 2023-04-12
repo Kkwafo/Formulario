@@ -18,16 +18,19 @@ class ProductwihtCatType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('code', TextType::class)
-            ->add('category', EntityType::class,[ "class" => ProductCategory::class])
+            ->add('category', EntityType::class, [
+                'class'     => ProductCategory::class,
+                'required'  => false
+            ])
             ->add('save', SubmitType::class, [
-                'label' => 'Save',
+                'label'     => 'Save',
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Product::class
+            'data_class'     => Product::class
         ]);
     }
 
@@ -35,4 +38,5 @@ class ProductwihtCatType extends AbstractType
     {
         return 'product';
     }
+    
 }

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List of Products{% endblock %}
+
+{% block body %}
+    <h1>List of Products</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.code }}</td>
+                    <td>{{ product.category.name }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">No products found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('product_new') }}">New Product</a>
+{% endblock %}

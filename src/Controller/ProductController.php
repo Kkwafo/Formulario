@@ -4,34 +4,44 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
-use App\Form\ProductWihtCatType;
+use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ProductRepository;
-
 
 class ProductController extends AbstractController
 {
-    public function index(): Response
+    /**
+     * @Route("/", name="product_index", methods={"GET"})
+     */
+    public function index(ProductRepository $productRepository): Response
     {
-    
-        return $this->render('form/form.html.twig');
+        $products = $productRepository->findAll();
+
+        return $this->render('form/form.html.twig', [
+            'products' => $products,
+        ]);
     }
+    // product/index.html.twig
+
 
     /**
      * @Route("/products/new", name="product_new", methods={"GET","POST"})
+     * @Route("/products/{id}/edit", name="product_edit", methods={"GET","POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, ?Product $product = null): Response
     {
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
+        if (!$product) {
+            $product = new Product();
+        }
+
+        $form = $this->createForm(ProductType::class, $product)
+                     ->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($product);
+            $entityManager->persist($form->getData());
             $entityManager->flush();
 
             return $this->redirectToRoute('product_index');
@@ -42,25 +52,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/products/edit/{id}", name="product_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Product $product): Response
-    {
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
-        //me sigue tirando problemas el doctrine
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('product_index');
-        }
-
-        return $this->render('product/edit.html.twig', [
-            'product' => $product,
-            'form' => $form->createView(),
-        ]);
-    }
 
     /**
      * @Route("/productswhitcat/new", name="productwithCat_new", methods={"GET","POST"})
@@ -68,11 +60,11 @@ class ProductController extends AbstractController
     public function newproduct(Request $request, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
-        $form = $this->createForm(ProductWihtCatType::class, $product);
-        $form->handleRequest($request);
+        $form = $this->createForm(ProductWihtCatType::class, $product)
+                     ->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($product);
+            $entityManager->persist($form->getData());
             $entityManager->flush();
 
             return $this->redirectToRoute('product_index');
